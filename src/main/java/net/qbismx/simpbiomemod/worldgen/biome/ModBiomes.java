@@ -39,7 +39,7 @@ public class ModBiomes {
     // 秋バイオームの設定
     private static Biome autumnBiome(BootstrapContext<Biome> context){
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-        // 以下のように設定しているが、友好な動物は基本的に明るさレベル10以上でないとスポーンしないので、キツネはスポーンしない
+        // 以下のように設定しているが、友好的な動物は基本的に明るさレベル10以上でないとスポーンしないので、キツネはスポーンしない
         spawnBuilder.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.FOX, 100, 4, 4));
         // 敵モブはスポーンするはず
         spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.BREEZE,100, 4, 4));
@@ -48,6 +48,7 @@ public class ModBiomes {
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
         // the BiomeDefaultFeaturesでは、バニラのバイオームと同じ順序に従う必要がある
+        // 何が生えたり、生成されたりするか
         globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addForestFlowers(biomeBuilder); // 森の花
         BiomeDefaultFeatures.addPlainGrass(biomeBuilder); // 平原の草
@@ -76,6 +77,7 @@ public class ModBiomes {
     // 悪夢バイオームの設定
     private static Biome nightmareBiome(BootstrapContext<Biome> context){
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
+        // どんなモブがスポーンするかの設定
         spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.RAVAGER, 100, 4, 4));
         spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ILLUSIONER, 100, 4, 4));
         spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.BLAZE, 100, 4, 4));
@@ -83,7 +85,7 @@ public class ModBiomes {
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
-        // the BiomeDefaultFeaturesでは、バニラのバイオームと同じ順序に従う必要がある
+        // the BiomeDefaultFeaturesでは、バニラのバイオームと同じ順序に従う必要がある。何が生えたり、生成されたりするか。
         globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
         BiomeDefaultFeatures.addFerns(biomeBuilder);
@@ -99,8 +101,8 @@ public class ModBiomes {
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(0x1c2d3f) // 水の色は暗めの青色
-                        .waterFogColor(0x000000) // 水中かな？
-                        .skyColor(0x000000) // 空の色は暗めの青色
+                        .waterFogColor(0x000000) // 水中の色は黒
+                        .skyColor(0x000000) // 空の色は黒
                         .grassColorOverride(0x8a2be2) // 草ブロックはブルーバイオレット
                         .foliageColorOverride(0x8a2be2) // 葉の色はブルーバイオレット
                         .fogColor(0x9e76b4) // 遠くの空の色。アメジスト
