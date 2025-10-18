@@ -39,26 +39,21 @@ public class ModBiomes {
     // 秋バイオームの設定
     private static Biome autumnBiome(BootstrapContext<Biome> context){
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 95, 4, 4));
-
-        BiomeDefaultFeatures.farmAnimals(spawnBuilder);
-        BiomeDefaultFeatures.commonSpawns(spawnBuilder);
+        // 以下のように設定しているが、友好な動物は基本的に明るさレベル10以上でないとスポーンしないので、キツネはスポーンしない
+        spawnBuilder.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.FOX, 100, 4, 4));
+        // 敵モブはスポーンするはず
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.BREEZE,100, 4, 4));
 
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
         // the BiomeDefaultFeaturesでは、バニラのバイオームと同じ順序に従う必要がある
         globalOverworldGeneration(biomeBuilder);
-        //BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
-        BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addFerns(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        BiomeDefaultFeatures.addExtraGold(biomeBuilder);
+        BiomeDefaultFeatures.addForestFlowers(biomeBuilder); // 森の花
+        BiomeDefaultFeatures.addPlainGrass(biomeBuilder); // 平原の草
+        BiomeDefaultFeatures.addDefaultOres(biomeBuilder); // 鉱石
 
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_PLAINS);
-
-        BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
@@ -73,7 +68,6 @@ public class ModBiomes {
                         .grassColorOverride(0xE2421F) // 草ブロックは紅葉色
                         .foliageColorOverride(0xca0048) // 葉の色は紅色
                         .fogColor(0x87ceeb) // 遠くの空は空色
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
                         .backgroundMusic(Musics.GAME)
                         .build())
                 .build();
@@ -82,18 +76,15 @@ public class ModBiomes {
     // 悪夢バイオームの設定
     private static Biome nightmareBiome(BootstrapContext<Biome> context){
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.RAVAGER, 95, 4, 4));
-        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ILLUSIONER, 95, 4, 4));
-        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.BLAZE, 95, 4, 4));
-
-        BiomeDefaultFeatures.commonSpawns(spawnBuilder);
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.RAVAGER, 100, 4, 4));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ILLUSIONER, 100, 4, 4));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.BLAZE, 100, 4, 4));
 
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
         // the BiomeDefaultFeaturesでは、バニラのバイオームと同じ順序に従う必要がある
         globalOverworldGeneration(biomeBuilder);
-        // BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
         BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
         BiomeDefaultFeatures.addFerns(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);

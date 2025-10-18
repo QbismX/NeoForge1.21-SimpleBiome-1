@@ -1,5 +1,5 @@
-// 1.21	2025-10-18T12:53:48.7498517	Registries
+// 1.21	2025-10-18T16:32:25.7339473	Registries
 3f68801374e637c86a605c3685f789af6a5380f4 data/simpbiomemod/dimension/introdim.json
-6444a2179117992de0152e76076dccb5a60fef7a data/simpbiomemod/dimension_type/introdim_type.json
-5e9965ab9cac4281522f105576cef8fd608f7e16 data/simpbiomemod/worldgen/biome/autumn_biome.json
-9547957f5a341e894b6301b5839d38b54a38c708 data/simpbiomemod/worldgen/biome/nightmare_biome.json
+1585c0153480c7d415bebc755f50db9078a8f80a data/simpbiomemod/dimension_type/introdim_type.json
+ab06c33dd13af70a11f3c249338b757908b427a7 data/simpbiomemod/worldgen/biome/autumn_biome.json
+39f0f1aadfea165eda313226eecc52776d42c0f7 data/simpbiomemod/worldgen/biome/nightmare_biome.json

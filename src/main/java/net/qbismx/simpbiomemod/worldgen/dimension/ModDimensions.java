@@ -10,7 +10,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
@@ -34,11 +33,11 @@ public class ModDimensions {
     public static final ResourceKey<DimensionType> INTRO_DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
             ResourceLocation.fromNamespaceAndPath(SimpBiomeMod.MODID, "introdim_type"));
 
-    // ディメンションの設定
+    // ディメンションの設定 DimensionTypes.classを参考にすると良いです
     public static void bootstrapType(BootstrapContext<DimensionType> context) {
         context.register(INTRO_DIM_TYPE, new DimensionType(
                 OptionalLong.empty(), // fixedTimeである。OptionalLong.of(数字)とすると時間が固定される。
-                true, // hasSkylight 空由来の光が存在するかどうか。
+                false, // hasSkylight 空由来の光が存在するかどうか。
                 false, // hasCeiling trueで岩盤の天井が生成される。理論的なものであり、場合によっては天井が生成されないことがある。
                 false, // ultrraWarm trueで水の蒸発、スポンジの乾燥、溶岩の粘度低下が起こる。
                 true, // natural trueだと、コンパスやベッドが正しく機能し、ネザーポータルからゾンビピグリンがスポーンする。
@@ -50,8 +49,8 @@ public class ModDimensions {
                 320, // logicalHeight コーラスフルーツやネザーポータルによって移動できる最高高度。このデータパックの適用前に既に上限外で繋がっているネザーポータルは通常通り機能する。
                 BlockTags.INFINIBURN_OVERWORLD, // infiniteburn
                 BuiltinDimensionTypes.OVERWORLD_EFFECTS, // effectsLocation
-                0, // ambientLight 明るさの仕様。0なら完全に空とブロック由来の明るさに従い、1なら明るさを使用せずワールド全体が明るく表示される
-                new DimensionType.MonsterSettings(true, true, ConstantInt.of(15), 15)
+                0.3F, // ambientLight 明るさの仕様。0なら完全に空とブロック由来の明るさに従い、1なら明るさを使用せずワールド全体が明るく表示される
+                new DimensionType.MonsterSettings(true, true, ConstantInt.of(7), 7)
         ));
     }
 
