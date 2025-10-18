@@ -37,7 +37,7 @@ public class ModDimensions {
     // ディメンションの設定
     public static void bootstrapType(BootstrapContext<DimensionType> context) {
         context.register(INTRO_DIM_TYPE, new DimensionType(
-                OptionalLong.of(12000), // fixedTime
+                OptionalLong.empty(), // fixedTimeである。OptionalLong.of(数字)とすると時間が固定される。
                 true, // hasSkylight 空由来の光が存在するかどうか。
                 false, // hasCeiling trueで岩盤の天井が生成される。理論的なものであり、場合によっては天井が生成されないことがある。
                 false, // ultrraWarm trueで水の蒸発、スポンジの乾燥、溶岩の粘度低下が起こる。
@@ -51,7 +51,7 @@ public class ModDimensions {
                 BlockTags.INFINIBURN_OVERWORLD, // infiniteburn
                 BuiltinDimensionTypes.OVERWORLD_EFFECTS, // effectsLocation
                 0, // ambientLight 明るさの仕様。0なら完全に空とブロック由来の明るさに従い、1なら明るさを使用せずワールド全体が明るく表示される
-                new DimensionType.MonsterSettings(true, false, ConstantInt.of(0), 0)
+                new DimensionType.MonsterSettings(true, true, ConstantInt.of(15), 15)
         ));
     }
 
