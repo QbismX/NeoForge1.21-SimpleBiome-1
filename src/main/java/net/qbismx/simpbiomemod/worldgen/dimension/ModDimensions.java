@@ -2,6 +2,7 @@ package net.qbismx.simpbiomemod.worldgen.dimension;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -9,9 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Climate;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
+import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
@@ -22,6 +21,7 @@ import net.qbismx.simpbiomemod.worldgen.biome.ModBiomes;
 
 import java.util.List;
 import java.util.OptionalLong;
+import java.util.Set;
 
 public class ModDimensions {
     public static final ResourceKey<LevelStem> INTRO_DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM,
@@ -36,7 +36,7 @@ public class ModDimensions {
     // ディメンションの設定 DimensionTypes.classを参考にすると良いです
     public static void bootstrapType(BootstrapContext<DimensionType> context) {
         context.register(INTRO_DIM_TYPE, new DimensionType(
-                OptionalLong.empty(), // fixedTimeである。OptionalLong.of(数字)とすると時間が固定される。
+                OptionalLong.empty(), // fixedTimeである。OptionalLong.of(数字)とすると時間が固定される。OptionalLong.empty()で時間が流れる
                 false, // hasSkylight 空由来の光が存在するかどうか。
                 false, // hasCeiling trueで岩盤の天井が生成される。理論的なものであり、場合によっては天井が生成されないことがある。
                 false, // ultrraWarm trueで水の蒸発、スポンジの乾燥、溶岩の粘度低下が起こる。
@@ -60,14 +60,15 @@ public class ModDimensions {
         HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
         HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 
-        /*
+        // 以下の①②③のいずれか１つ使いたいものだけ書いてよい
+        // ① FixedBiomeSource １つのバイオームだけ生成する
         NoiseBasedChunkGenerator wrappedChunkGenerator = new NoiseBasedChunkGenerator(
                 new FixedBiomeSource(biomeRegistry.getOrThrow(Biomes.RIVER)),
                 noiseGenSettings.getOrThrow(NoiseGeneratorSettings.OVERWORLD)
         );
-         */
 
-        // バイオームの種類や地形の生成
+
+        // ② 複数のバイオームをランダムな配置で生成する(Climate.parametersの引数は前から順に、気温・湿度・大陸性・地形の平坦度(erosion)・地面からの深さ(depth)・奇異性・offsetを表す)
         NoiseBasedChunkGenerator noiseBasedChunkGenerator = new NoiseBasedChunkGenerator(
                 MultiNoiseBiomeSource.createFromList(
                         new Climate.ParameterList<>(List.of(
@@ -78,8 +79,17 @@ public class ModDimensions {
                         ))),
                 noiseGenSettings.getOrThrow(NoiseGeneratorSettings.OVERWORLD)); // オーバーワールド風のディメンションとする
 
-        // LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.INTRO_DIM_TYPE), wrappedChunkGenerator);
-        LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.INTRO_DIM_TYPE), noiseBasedChunkGenerator);
+
+
+        // ③ 格子状にバイオームを生成する(size=1で2×2チャンク, size=2で4×4チャンク, size=3で8×8チャンク)
+        NoiseBasedChunkGenerator checkerboardChunkGenerator = new NoiseBasedChunkGenerator(
+                new CheckerboardColumnBiomeSource(HolderSet.direct(List.of(biomeRegistry.getOrThrow(ModBiomes.AUTUMN_BIOME), biomeRegistry.getOrThrow(ModBiomes.NIGHTMARE_BIOME))), 3)
+                ,noiseGenSettings.getOrThrow(NoiseGeneratorSettings.OVERWORLD)); // オーバーワールド風のディメンションとする
+
+
+        // ① LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.INTRO_DIM_TYPE), wrappedChunkGenerator);
+        // ② LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.INTRO_DIM_TYPE), noiseBasedChunkGenerator);
+         LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.INTRO_DIM_TYPE), checkerboardChunkGenerator);
 
         context.register(INTRO_DIM_KEY, stem);
     }
