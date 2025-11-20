@@ -21,7 +21,6 @@ import net.qbismx.simpbiomemod.worldgen.biome.ModBiomes;
 
 import java.util.List;
 import java.util.OptionalLong;
-import java.util.Set;
 
 public class ModDimensions {
     public static final ResourceKey<LevelStem> INTRO_DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM,
@@ -60,7 +59,7 @@ public class ModDimensions {
         HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
         HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 
-        // 以下の①②③のいずれか１つ使いたいものだけ書いてよい
+        // 以下の①②③のいずれか１つ使いたいものだけ書けばよい
         // ① FixedBiomeSource １つのバイオームだけ生成する
         NoiseBasedChunkGenerator wrappedChunkGenerator = new NoiseBasedChunkGenerator(
                 new FixedBiomeSource(biomeRegistry.getOrThrow(Biomes.RIVER)),
